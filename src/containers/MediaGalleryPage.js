@@ -11,34 +11,27 @@ import "../styles/style.css";
 
 // MediaGalleryPage Component
 class MediaGalleryPage extends Component {
-  constructor() {
-    super();
-    this.handleSearch = this.handleSearch.bind(this);
-    this.handleSelectImage = this.handleSelectImage.bind(this);
-    this.handleSelectVideo = this.handleSelectVideo.bind(this);
-  }
-
   // Dispatches *searchMediaAction*  immediately after initial rendering
   componentDidMount() {
-    this.props.dispatch(searchMediaAction("rain"));
+    this.props.searchMediaAction("rain");
   }
 
   // Dispatches *selectImageAction* when any image is clicked
-  handleSelectImage(selectedImage) {
-    this.props.dispatch(selectImageAction(selectedImage));
+  handleSelectImage = (selectedImage) => {
+    this.props.selectImageAction(selectedImage);
   }
 
   // Dispatches *selectvideoAction* when any video is clicked
-  handleSelectVideo(selectedVideo) {
-    this.props.dispatch(selectVideoAction(selectedVideo));
+  handleSelectVideo = (selectedVideo) => {
+    this.props.selectVideoAction(selectedVideo);
   }
 
   // Dispatches *searchMediaAction* with query param.
   // We ensure action is dispatched to the store only if query param is provided.
-  handleSearch(event) {
+  handleSearch = (event) => {
     event.preventDefault();
     if (this.query !== null) {
-      this.props.dispatch(searchMediaAction(this.query.value));
+      this.props.searchMediaAction(this.query.value);
       this.query.value = "";
     }
   }
@@ -85,5 +78,14 @@ const mapStateToProps = ({ images, videos }) => ({
   selectedVideo: videos.selectedVideo
 });
 
+const mapDispatchToProps = {
+  selectImageAction,
+  searchMediaAction,
+  selectVideoAction
+};
+
 // connect method from react-router connects the component with redux store
-export default connect(mapStateToProps)(MediaGalleryPage);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(MediaGalleryPage);
